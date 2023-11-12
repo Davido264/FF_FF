@@ -1,0 +1,9 @@
+.list-item-content {
+    display: flex;
+    align-items: center;
+  }
+  
+  .mat-icon {
+    margin-right: 16px; 
+  }
+  
