@@ -29,6 +29,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MomentDateModule } from '@angular/material-moment-adapter';
 
 import { MatChipsModule } from '@angular/material/chips';
+import { MatDividerModule } from '@angular/material/divider';
 
 @NgModule({
   declarations: [],
@@ -60,6 +61,7 @@ import { MatChipsModule } from '@angular/material/chips';
     MatNativeDateModule,
     MomentDateModule,
     MatChipsModule,
+    MatDividerModule,
   ],
   providers: [MatDatepickerModule, MatNativeDateModule],
 })

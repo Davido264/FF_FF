@@ -85,7 +85,7 @@ export class ProductoComponent implements OnInit, AfterViewInit {
 
   eliminarProductos(producto: Producto) {
     Swal.fire({
-      title: '¿Deseas eliminar el usuario?',
+      title: '¿Deseas eliminar el producto?',
       text: producto.nombre,
       icon: 'warning',
       confirmButtonColor: '#3085d6',

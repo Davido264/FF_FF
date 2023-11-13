@@ -1,6 +1,7 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatDialog } from '@angular/material/dialog';
 
 import { ProductoService } from 'src/app/Services/producto.service';
 import { VentaService } from 'src/app/Services/venta.service';
@@ -11,6 +12,7 @@ import { Venta } from 'src/app/Interfaces/venta';
 import { DetalleVenta } from 'src/app/Interfaces/detalle-venta';
 import Swal from 'sweetalert2';
 import { OnSameUrlNavigation } from '@angular/router';
+import { ModalBusquedaProductosComponent } from '../../Modales/modal-busqueda-productos/modal-busqueda-productos.component';
 
 @Component({
   selector: 'app-venta',
@@ -30,9 +32,10 @@ export class VentaComponent implements OnInit {
 
   productoSeleccionado!: Producto;
   tipodePagoPorDefecto: string = 'Efectivo';
-  totalPagar: number = 0;
+  subTotal: number = 0;
+  iva: number = 0;
+  total: number = 0;
 
-  formularioProductoVenta: FormGroup;
   columnasTabla: string[] = [
     'producto',
     'cantidad',
@@ -57,12 +60,10 @@ export class VentaComponent implements OnInit {
     private fb: FormBuilder,
     private _productoServicio: ProductoService,
     private _ventaServicio: VentaService,
-    private _utilidadServicio: UtilidadService
+    private _utilidadServicio: UtilidadService,
+    private productDialog: MatDialog,
+    private clientDialog: MatDialog,
   ) {
-    this.formularioProductoVenta = this.fb.group({
-      producto: ['', Validators.required],
-      cantidad: ['', Validators.required],
-    });
 
     this._productoServicio.lista().subscribe({
       next: (data) => {
@@ -75,12 +76,6 @@ export class VentaComponent implements OnInit {
       },
       error: (e) => {},
     });
-
-    this.formularioProductoVenta
-      .get('producto')
-      ?.valueChanges.subscribe((value) => {
-        this.listaProductosFiltro = this.retornarProductosPorFiltro(value);
-      });
   }
 
   ngOnInit(): void {}
@@ -93,36 +88,45 @@ export class VentaComponent implements OnInit {
     this.productoSeleccionado = event.option.value;
   }
 
-  agregarProductoParaVenta() {
-    const _cantidad: number = this.formularioProductoVenta.value.cantidad;
-    const _precio: number = parseFloat(this.productoSeleccionado.precio);
-    const _total: number = _cantidad * _precio;
+  buscarProductos() {
+    this.productDialog
+      .open(ModalBusquedaProductosComponent, {
+        data: this.listaProductos,
+        disableClose: true,
+        width: '90svw',
+      })
+      .afterClosed()
+      .subscribe((resultado) => {
+        if (resultado) {
+          this.agregarProductosParaVenta(resultado.updatedData, resultado.listaProductoParaVenta)
+        }
+      });
+  }
 
-    this.totalPagar = this.totalPagar + _total;
+  agregarProductosParaVenta(updatedData: Producto[],listaProductoParaVenta: DetalleVenta[]) {
+    this.listaProductos = updatedData
+    this.listaProductoParaVenta = listaProductoParaVenta
 
-    this.listaProductoParaVenta.push({
-      idProducto: this.productoSeleccionado.idProducto,
-      productoDescription: this.productoSeleccionado.nombre,
-      cantidad: _cantidad,
-      precioTexto: String(_precio.toFixed(2)),
-      totalTexto: String(_total.toFixed(2)),
-    });
+    this.subTotal = this.listaProductoParaVenta
+      .map(d => Number(d.totalTexto))
+      .reduce((p,n) => p + n, 0)
+
+    this.iva = this.subTotal * 0.12;
+    this.total = this.subTotal + this.iva;
 
     this.datosDetalleVenta = new MatTableDataSource(
       this.listaProductoParaVenta
     );
-
-    this.formularioProductoVenta.patchValue({
-      producto: '',
-      cantidad: '',
-    });
   }
 
   eliminarProducto(detalle: DetalleVenta) {
-    (this.totalPagar = this.totalPagar - parseFloat(detalle.totalTexto)),
-      (this.listaProductoParaVenta = this.listaProductoParaVenta.filter(
+    this.subTotal = this.subTotal - parseFloat(detalle.totalTexto)
+    this.listaProductoParaVenta = this.listaProductoParaVenta.filter(
         (p) => p.idProducto != detalle.idProducto
-      ));
+    );
+
+    this.iva = this.subTotal * 0.12;
+    this.total = this.subTotal + this.iva;
 
     this.datosDetalleVenta = new MatTableDataSource(
       this.listaProductoParaVenta
@@ -134,14 +138,14 @@ export class VentaComponent implements OnInit {
       this.bloquearBotonRegistrar = true;
       const request: Venta = {
         tipoPago: this.tipodePagoPorDefecto,
-        totalTexto: String(this.totalPagar.toFixed(2)),
+        totalTexto: String(this.subTotal.toFixed(2)),
         detalleVenta: this.listaProductoParaVenta,
       };
 
       this._ventaServicio.registrar(request).subscribe({
         next: (reponse) => {
           if (reponse.status) {
-            this.totalPagar = 0.0;
+            this.subTotal = 0.0;
             this.listaProductoParaVenta = [];
             this.datosDetalleVenta = new MatTableDataSource(
               this.listaProductoParaVenta
