@@ -20,37 +20,36 @@ export class ModalBusquedaProductosComponent implements AfterViewInit {
     'precio',
     'acciones',
   ];
-  dataListaProductos = new MatTableDataSource(this.dataInicio);
-  listaProductoParaVenta: DetalleVenta[] = [];
+  dataListaProductos = new MatTableDataSource(this.dataInicio.listaProductos);
   @ViewChild(MatPaginator) paginacionTabla!: MatPaginator;
 
   constructor(
     private _productoServicio: ProductoService,
     private _utilidadServicio: UtilidadService,
     private _dialogRef: MatDialogRef<ModalBusquedaProductosComponent>,
-    @Inject(MAT_DIALOG_DATA) public dataInicio: Producto[]
+    @Inject(MAT_DIALOG_DATA) public dataInicio: { listaProductos: Producto[], listaProductoParaVenta: DetalleVenta[] }
   ) {}
 
   closeDialog(canceled: boolean) {
     if (!canceled) {
-      this._dialogRef.close({ updatedData: this.dataInicio, listaProductoParaVenta: this.listaProductoParaVenta})
+      this._dialogRef.close({ updatedData: this.dataInicio.listaProductos, listaProductoParaVenta: this.dataInicio.listaProductoParaVenta})
       return
     }
 
-    this.listaProductoParaVenta.forEach(d => {
-      const producto = this.dataInicio.find(i => i.idProducto === d.idProducto)
+    this.dataInicio.listaProductoParaVenta.forEach(d => {
+      const producto = this.dataInicio.listaProductos.find(i => i.idProducto === d.idProducto)
       producto!.stock += d.cantidad
     })
-    this.listaProductoParaVenta = []
+    this.dataInicio.listaProductoParaVenta = []
 
-    this._dialogRef.close({ updatedData: this.dataInicio, listaProductoParaVenta: this.listaProductoParaVenta})
+    this._dialogRef.close(undefined)
   }
 
   reduceCount(item: Producto) {
     item.stock -= 1
     const _precio: number = parseFloat(item.precio);
 
-    this.listaProductoParaVenta.push({
+    this.dataInicio.listaProductoParaVenta.push({
       idProducto: item.idProducto,
       productoDescription: item.nombre,
       cantidad: 1,
@@ -60,7 +59,7 @@ export class ModalBusquedaProductosComponent implements AfterViewInit {
   }
 
   checkDisabled(id: number): boolean {
-    return this.listaProductoParaVenta.some(p => p.idProducto === id)
+    return this.dataInicio.listaProductoParaVenta.some(p => p.idProducto === id)
   }
 
   ngAfterViewInit(): void {

@@ -1,0 +1,27 @@
+<h2 mat-dialog-title> Editar cantidad </h2>
+
+<mat-dialog-content>
+  <form [formGroup]="formularioProducto">
+    <mat-grid-list cols="1" rowHeight="45dvh">
+      <mat-grid-tile>
+        <mat-form-field appearance="outline" style="width: 60%;">
+          <mat-label> Cantidad </mat-label>
+          <input matInput autocomplete="off" formControlName="cantidad" type="number">
+          <mat-icon matSuffix>edit_square</mat-icon>
+          <ng-container *ngIf="formularioProducto.invalid; then first"></ng-container>
+          <ng-template #first>
+            <mat-error style="font-size: smaller;">{{getError()}}</mat-error>
+          </ng-template>
+        </mat-form-field>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-raised-button (click)="closeDialog(true)" color="warn">Volver</button>
+  <button mat-raised-button color="primary"
+    [disabled]="formularioProducto.invalid"
+    (click)="closeDialog(false)"
+  >Confirmar</button>
+</mat-dialog-actions>

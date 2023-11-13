@@ -13,6 +13,7 @@ import { ModalUsuarioComponent } from './Modales/modal-usuario/modal-usuario.com
 import { ModalProductosComponent } from './Modales/modal-productos/modal-productos.component';
 import { ModalDetalleVentaComponent } from './Modales/modal-detalle-venta/modal-detalle-venta.component';
 import { ModalBusquedaProductosComponent } from './Modales/modal-busqueda-productos/modal-busqueda-productos.component';
+import { ModalEditarCantidadComponent } from './Modales/modal-editar-cantidad/modal-editar-cantidad.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { ModalBusquedaProductosComponent } from './Modales/modal-busqueda-produc
     ModalProductosComponent,
     ModalDetalleVentaComponent,
     ModalBusquedaProductosComponent,
+    ModalEditarCantidadComponent,
   ],
   imports: [CommonModule, LayoutRoutingModule, SharedModule],
 })

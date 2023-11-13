@@ -13,6 +13,7 @@ import { DetalleVenta } from 'src/app/Interfaces/detalle-venta';
 import Swal from 'sweetalert2';
 import { OnSameUrlNavigation } from '@angular/router';
 import { ModalBusquedaProductosComponent } from '../../Modales/modal-busqueda-productos/modal-busqueda-productos.component';
+import { ModalEditarCantidadComponent } from '../../Modales/modal-editar-cantidad/modal-editar-cantidad.component';
 
 @Component({
   selector: 'app-venta',
@@ -61,8 +62,9 @@ export class VentaComponent implements OnInit {
     private _productoServicio: ProductoService,
     private _ventaServicio: VentaService,
     private _utilidadServicio: UtilidadService,
-    private productDialog: MatDialog,
-    private clientDialog: MatDialog,
+    private _productoDialog: MatDialog,
+    private _clienteDialog: MatDialog,
+    private _edicionProductoDialog: MatDialog,
   ) {
 
     this._productoServicio.lista().subscribe({
@@ -89,9 +91,9 @@ export class VentaComponent implements OnInit {
   }
 
   buscarProductos() {
-    this.productDialog
+    this._productoDialog
       .open(ModalBusquedaProductosComponent, {
-        data: this.listaProductos,
+        data: { listaProductos: this.listaProductos, listaProductoParaVenta: this.listaProductoParaVenta },
         disableClose: true,
         width: '90svw',
       })
@@ -119,11 +121,45 @@ export class VentaComponent implements OnInit {
     );
   }
 
+  modificarCantidadProducto(detalle: DetalleVenta) {
+    const producto = this.listaProductos.find(p => p.idProducto === detalle.idProducto)!
+    this._edicionProductoDialog
+      .open(ModalEditarCantidadComponent, {
+        data: { curr: detalle.cantidad, max: producto.stock },
+        disableClose: true,
+        width: '60svw',
+      })
+      .afterClosed()
+      .subscribe((resultado) => {
+        if (resultado) {
+          const producto = this.listaProductos.find(p => p.idProducto === detalle.idProducto)
+          producto!.stock += (detalle.cantidad - resultado)
+
+          detalle.cantidad = resultado
+          detalle.totalTexto = (Number(detalle.precioTexto) * resultado).toFixed(2)
+
+          this.subTotal = this.listaProductoParaVenta
+            .map(d => Number(d.totalTexto))
+            .reduce((p,n) => p + n, 0)
+
+          this.iva = this.subTotal * 0.12;
+          this.total = this.subTotal + this.iva;
+
+          this.datosDetalleVenta = new MatTableDataSource(
+            this.listaProductoParaVenta
+          );
+        }
+      });
+  }
+
   eliminarProducto(detalle: DetalleVenta) {
     this.subTotal = this.subTotal - parseFloat(detalle.totalTexto)
     this.listaProductoParaVenta = this.listaProductoParaVenta.filter(
         (p) => p.idProducto != detalle.idProducto
     );
+
+    const producto = this.listaProductos.find((p) => p.idProducto === detalle.idProducto)
+    producto!.stock += detalle.cantidad
 
     this.iva = this.subTotal * 0.12;
     this.total = this.subTotal + this.iva;
