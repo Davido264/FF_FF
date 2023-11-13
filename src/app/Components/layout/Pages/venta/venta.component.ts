@@ -21,32 +21,35 @@ import { OnSameUrlNavigation } from '@angular/router';
 })
 export class VentaComponent  implements OnInit{
 
-   listaProductos:Producto[]=[];
-   listaProductosFiltro: Producto[]=[];
+  flexEnd:string = "width: 100%; display: flex; justify-content: flex-end;"
+  flexStart:string = "width: 100%; display: flex; justify-content: flex-start;"
 
-   listaProductoParaVenta:DetalleVenta[]=[];
-   bloquearBotonRegistrar: boolean = false;
+  listaProductos:Producto[]=[];
+  listaProductosFiltro: Producto[]=[];
 
-   productoSeleccionado!: Producto;
-   tipodePagoPorDefecto: string = "Efectivo";
-   totalPagar: number = 0;
+  listaProductoParaVenta:DetalleVenta[]=[];
+  bloquearBotonRegistrar: boolean = false;
 
-   formularioProductoVenta: FormGroup;
-   columnasTabla:string []=['producto','cantidad','precio','total','accion'];
-   datosDetalleVenta = new MatTableDataSource(this.listaProductoParaVenta);
+  productoSeleccionado!: Producto;
+  tipodePagoPorDefecto: string = "Efectivo";
+  totalPagar: number = 0;
 
-   retornarProductosPorFiltro(busqueda:any):Producto[]{
+  formularioProductoVenta: FormGroup;
+  columnasTabla:string []=['producto','cantidad','precio','total','accion'];
+  datosDetalleVenta = new MatTableDataSource(this.listaProductoParaVenta);
+
+  retornarProductosPorFiltro(busqueda:any):Producto[]{
     const valorBuscado = typeof busqueda === "string"? busqueda.toLocaleLowerCase(): busqueda.nombre.toLocaleLowerCase()
 
     return this.listaProductos.filter(item => item.nombre.toLocaleLowerCase().includes(valorBuscado));
-   }
+  }
 
-   constructor(
-private fb:FormBuilder,
-private _productoServicio:ProductoService,
-private _ventaServicio : VentaService,
-private _utilidadServicio: UtilidadService
-   ){
+  constructor(
+    private fb:FormBuilder,
+    private _productoServicio:ProductoService,
+    private _ventaServicio : VentaService,
+    private _utilidadServicio: UtilidadService
+  ){
 
     this.formularioProductoVenta = this.fb.group({
       producto:['',Validators.required],
@@ -56,70 +59,70 @@ private _utilidadServicio: UtilidadService
 
     this._productoServicio.lista().subscribe({
       next:(data)=>{
-       if(data.status) {
-        const lista = data.value as Producto[];
-        this.listaProductos = lista.filter(p => p.esActivo == 1 && p.stock > 0);
-       }
+        if(data.status) {
+          const lista = data.value as Producto[];
+          this.listaProductos = lista.filter(p => p.esActivo == 1 && p.stock > 0);
+        }
       },
       error:(e)=>{}
     })
 
-     this.formularioProductoVenta.get('producto')?.valueChanges.subscribe(value =>{
+    this.formularioProductoVenta.get('producto')?.valueChanges.subscribe(value =>{
       this.listaProductosFiltro = this.retornarProductosPorFiltro(value);
-     })
-   }
+    })
+  }
 
 
 
   ngOnInit(): void {
-    
+
   }
 
   mostrarProducto(producto:Producto):string{
     return producto.nombre;
   }
 
-productoParaVenta(event:any){
-  this.productoSeleccionado = event.option.value;
-}
+  productoParaVenta(event:any){
+    this.productoSeleccionado = event.option.value;
+  }
 
-agregarProductoParaVenta(){
-  const _cantidad:number = this.formularioProductoVenta.value.cantidad;
-  const _precio: number = parseFloat(this.productoSeleccionado.precio);
-  const _total: number = _cantidad * _precio;
+  agregarProductoParaVenta(){
+    const _cantidad:number = this.formularioProductoVenta.value.cantidad;
+    const _precio: number = parseFloat(this.productoSeleccionado.precio);
+    const _total: number = _cantidad * _precio;
 
-  this.totalPagar= this.totalPagar+_total;
+    this.totalPagar= this.totalPagar+_total;
 
-  this.listaProductoParaVenta.push({
+    this.listaProductoParaVenta.push({
 
-   idProducto:this.productoSeleccionado.idProducto,
-   productoDescription: this.productoSeleccionado.nombre,
-   cantidad: _cantidad,
-   precioTexto:String(_precio.toFixed(2)),
-   totalTexto:String(_total.toFixed(2))
-  })
+      idProducto:this.productoSeleccionado.idProducto,
+      productoDescription: this.productoSeleccionado.nombre,
+      cantidad: _cantidad,
+      precioTexto:String(_precio.toFixed(2)),
+      totalTexto:String(_total.toFixed(2))
+    })
 
-  this.datosDetalleVenta = new MatTableDataSource(this.listaProductoParaVenta);
+    this.datosDetalleVenta = new MatTableDataSource(this.listaProductoParaVenta);
 
-  this.formularioProductoVenta.patchValue({
-   producto:'',
-   cantidad:''
+    this.formularioProductoVenta.patchValue({
+      producto:'',
+      cantidad:''
 
-  })
-}
+    })
+  }
 
-eliminarProducto(detalle:DetalleVenta){
-  this.totalPagar = this.totalPagar - parseFloat(detalle.totalTexto),
-  this.listaProductoParaVenta = this.listaProductoParaVenta.filter(p => p.idProducto != detalle.idProducto);
+  eliminarProducto(detalle:DetalleVenta){
+    this.totalPagar = this.totalPagar - parseFloat(detalle.totalTexto),
+    this.listaProductoParaVenta = this.listaProductoParaVenta.filter(p => p.idProducto != detalle.idProducto);
 
-  this.datosDetalleVenta = new MatTableDataSource(this.listaProductoParaVenta);
-}
+    this.datosDetalleVenta = new MatTableDataSource(this.listaProductoParaVenta);
+  }
 
-   registrarVenta(){
+  registrarVenta(){
 
     if(this.listaProductoParaVenta.length > 0){
 
-      this.bloquearBotonRegistrar = true; 
+      this.bloquearBotonRegistrar = true;
       const request : Venta = {
         tipoPago : this.tipodePagoPorDefecto,
         totalTexto: String(this.totalPagar.toFixed(2)),
@@ -128,31 +131,31 @@ eliminarProducto(detalle:DetalleVenta){
       }
 
       this._ventaServicio.registrar(request).subscribe({
-     next:(reponse)=>{
+        next:(reponse)=>{
 
-      if(reponse.status){
-        this.totalPagar= 0.00;
-        this.listaProductoParaVenta=[];
-        this.datosDetalleVenta = new MatTableDataSource(this.listaProductoParaVenta);
+          if(reponse.status){
+            this.totalPagar= 0.00;
+            this.listaProductoParaVenta=[];
+            this.datosDetalleVenta = new MatTableDataSource(this.listaProductoParaVenta);
 
-        Swal.fire({
-          icon:'success',
-          title:'Venta Registrada!',
-          text:`Numero de venta: ${reponse.value.numeroDocumento}`
+            Swal.fire({
+              icon:'success',
+              title:'Venta Registrada!',
+              text:`Numero de venta: ${reponse.value.numeroDocumento}`
 
-        })
-      }else
-       this._utilidadServicio.mostrarAlerta("No se pudo registrar la venta","Opps!");
-     },
+            })
+          }else
+          this._utilidadServicio.mostrarAlerta("No se pudo registrar la venta","Opps!");
+        },
 
-     complete:()=>{
-      this.bloquearBotonRegistrar=false;
-     },
-     error:(e) => {}
+        complete:()=>{
+          this.bloquearBotonRegistrar=false;
+        },
+        error:(e) => {}
 
       })
     }
-   }
-
   }
+
+}
 
