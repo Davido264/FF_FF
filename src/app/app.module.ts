@@ -9,18 +9,14 @@ import { LayoutComponent } from './Components/layout/layout.component';
 import { SharedModule } from './Reutilizable/shared/shared.module';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    LoginComponent,
-    LayoutComponent
-  ],
+  declarations: [AppComponent, LoginComponent, LayoutComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    SharedModule
+    SharedModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

@@ -13,94 +13,105 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-producto',
   templateUrl: './producto.component.html',
-  styleUrls: ['./producto.component.css']
+  styleUrls: ['./producto.component.css'],
 })
 export class ProductoComponent implements OnInit, AfterViewInit {
-  columnasTabla:string[]=['nombre','categoria','stock','precio','estado','acciones'];
-  dataInicio:Producto[]=[];
+  columnasTabla: string[] = [
+    'nombre',
+    'categoria',
+    'stock',
+    'precio',
+    'estado',
+    'acciones',
+  ];
+  dataInicio: Producto[] = [];
   dataListaProductos = new MatTableDataSource(this.dataInicio);
-  @ViewChild(MatPaginator)paginacionTabla!:MatPaginator;
+  @ViewChild(MatPaginator) paginacionTabla!: MatPaginator;
 
   constructor(
-    private dialog:MatDialog,
-    private _productoServicio : ProductoService,
-    private _utilidadServicio : UtilidadService
-  ){}
+    private dialog: MatDialog,
+    private _productoServicio: ProductoService,
+    private _utilidadServicio: UtilidadService
+  ) {}
 
-
-  obtenerProductos(){
+  obtenerProductos() {
     this._productoServicio.lista().subscribe({
-      next:(data)=>{
-       if(data.status) 
-       this.dataListaProductos.data=data.value;
-      else
-      this._utilidadServicio.mostrarAlerta("No se encontraron datos","Opps!")
+      next: (data) => {
+        if (data.status) this.dataListaProductos.data = data.value;
+        else
+          this._utilidadServicio.mostrarAlerta(
+            'No se encontraron datos',
+            'Opps!'
+          );
       },
-      error:(e)=>{}
-    })
+      error: (e) => {},
+    });
   }
   ngOnInit(): void {
     this.obtenerProductos();
   }
 
   ngAfterViewInit(): void {
-    this.dataListaProductos.paginator= this.paginacionTabla;
+    this.dataListaProductos.paginator = this.paginacionTabla;
   }
 
-  aplicarFiltroTabla(event:Event){
-
+  aplicarFiltroTabla(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataListaProductos.filter = filterValue.trim().toLocaleLowerCase();
-  
-}
+  }
 
-nuevoProducto(){
-  this.dialog.open(ModalProductosComponent,{
-       
-          disableClose: true
-  }).afterClosed().subscribe(resultado =>{
-    if(resultado === "true")this.obtenerProductos();
-
-  })
-}
-
-
-editarProducto(producto:Producto){
-  this.dialog.open(ModalProductosComponent,{
-       
-          disableClose: true,
-          data:producto
-  }).afterClosed().subscribe(resultado =>{
-    if(resultado === "true")this.obtenerProductos();
-
-  })
-}
-
-eliminarProductos(producto:Producto){
-  Swal.fire({
-    title: '¿Deseas eliminar el usuario?',
-    text: producto.nombre,
-    icon:"warning",
-    confirmButtonColor:"#3085d6",
-    confirmButtonText:"Si, eliminar",
-    showCancelButton: true,
-    cancelButtonColor:'#d33',
-    cancelButtonText:'No,volver'
-  }).then((resultado)=>{
-    if(resultado.isConfirmed){
-      this._productoServicio.eliminar(producto.idProducto).subscribe({
-        next:(data)=>{
-          if(data.status){
-            this._utilidadServicio.mostrarAlerta("El Producto se elimino","Listo!")
-            this.obtenerProductos();
-          }else
-          this._utilidadServicio.mostrarAlerta("No se pudo eliminar el producto","Error!")
-        },
-        error:(e)=>{}
+  nuevoProducto() {
+    this.dialog
+      .open(ModalProductosComponent, {
+        disableClose: true,
       })
+      .afterClosed()
+      .subscribe((resultado) => {
+        if (resultado === 'true') this.obtenerProductos();
+      });
+  }
 
-    }
-  })
+  editarProducto(producto: Producto) {
+    this.dialog
+      .open(ModalProductosComponent, {
+        disableClose: true,
+        data: producto,
+      })
+      .afterClosed()
+      .subscribe((resultado) => {
+        if (resultado === 'true') this.obtenerProductos();
+      });
+  }
 
-}
+  eliminarProductos(producto: Producto) {
+    Swal.fire({
+      title: '¿Deseas eliminar el usuario?',
+      text: producto.nombre,
+      icon: 'warning',
+      confirmButtonColor: '#3085d6',
+      confirmButtonText: 'Si, eliminar',
+      showCancelButton: true,
+      cancelButtonColor: '#d33',
+      cancelButtonText: 'No,volver',
+    }).then((resultado) => {
+      if (resultado.isConfirmed) {
+        this._productoServicio.eliminar(producto.idProducto).subscribe({
+          next: (data) => {
+            if (data.status) {
+              this._utilidadServicio.mostrarAlerta(
+                'El Producto se elimino',
+                'Listo!'
+              );
+              this.obtenerProductos();
+            } else
+              this._utilidadServicio.mostrarAlerta(
+                'No se pudo eliminar el producto',
+                'Error!'
+              );
+          },
+          error: (e) => {},
+        });
+      }
+    });
+  }
 }

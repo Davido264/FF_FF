@@ -14,7 +14,6 @@ import { ModalProductosComponent } from './Modales/modal-productos/modal-product
 import { ModalDetalleVentaComponent } from './Modales/modal-detalle-venta/modal-detalle-venta.component';
 import { ModalBusquedaProductosComponent } from './Modales/modal-busqueda-productos/modal-busqueda-productos.component';
 
-
 @NgModule({
   declarations: [
     DashBoardComponent,
@@ -26,12 +25,8 @@ import { ModalBusquedaProductosComponent } from './Modales/modal-busqueda-produc
     ModalUsuarioComponent,
     ModalProductosComponent,
     ModalDetalleVentaComponent,
-    ModalBusquedaProductosComponent
+    ModalBusquedaProductosComponent,
   ],
-  imports: [
-    CommonModule,
-    LayoutRoutingModule,
-    SharedModule
-  ]
+  imports: [CommonModule, LayoutRoutingModule, SharedModule],
 })
-export class LayoutModule { }
+export class LayoutModule {}
