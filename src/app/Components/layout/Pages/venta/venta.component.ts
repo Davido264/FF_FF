@@ -14,6 +14,8 @@ import Swal from 'sweetalert2';
 import { OnSameUrlNavigation } from '@angular/router';
 import { ModalBusquedaProductosComponent } from '../../Modales/modal-busqueda-productos/modal-busqueda-productos.component';
 import { ModalEditarCantidadComponent } from '../../Modales/modal-editar-cantidad/modal-editar-cantidad.component';
+import { ModalBuscarClienteComponent } from '../../Modales/modal-buscar-cliente/modal-buscar-cliente.component';
+import { Cliente } from 'src/app/Interfaces/cliente';
 
 @Component({
   selector: 'app-venta',
@@ -32,6 +34,7 @@ export class VentaComponent implements OnInit {
   bloquearBotonRegistrar: boolean = false;
 
   productoSeleccionado!: Producto;
+  cliente?: Cliente;
   tipodePagoPorDefecto: string = 'Efectivo';
   subTotal: number = 0;
   iva: number = 0;
@@ -88,6 +91,20 @@ export class VentaComponent implements OnInit {
 
   productoParaVenta(event: any) {
     this.productoSeleccionado = event.option.value;
+  }
+
+  buscarClientes() {
+    this._clienteDialog
+      .open(ModalBuscarClienteComponent, {
+        disableClose: true,
+        width: '90svw',
+      })
+      .afterClosed()
+      .subscribe((resultado) => {
+        if (resultado) {
+          this.cliente = resultado
+        }
+      });
   }
 
   buscarProductos() {

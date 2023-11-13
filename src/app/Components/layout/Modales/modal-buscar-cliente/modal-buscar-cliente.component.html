@@ -1,0 +1,47 @@
+<h1 mat-dialog-title> Buscar Cliente </h1>
+<mat-dialog-content style="height: 90svh;">
+  <mat-form-field >
+    <mat-label>Buscar Clientes</mat-label>
+    <input matInput (keyup)="aplicarFiltroTabla($event)" #input>
+  </mat-form-field>
+
+  <div class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataListaClientes">
+
+      <ng-container matColumnDef="cedula">
+        <th mat-header-cell *matHeaderCellDef>Cédula</th>
+        <td mat-cell *matCellDef="let element" (click)="select(element)"> {{element.cedulaCliente}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="nombres">
+        <th mat-header-cell *matHeaderCellDef> Nombres </th>
+        <td mat-cell *matCellDef="let element" (click)="select(element)"> {{element.nombreCompleto}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="direccion">
+        <th mat-header-cell *matHeaderCellDef>  Dirección </th>
+        <td mat-cell *matCellDef="let element" (click)="select(element)"> {{element.direccion}} </td>
+      </ng-container>
+
+
+      <ng-container matColumnDef="correo">
+        <th mat-header-cell *matHeaderCellDef>  Correo </th>
+        <td mat-cell *matCellDef="let element" (click)="select(element)"> {{element.correo}} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="columnasTabla"></tr>
+      <tr mat-row *matRowDef="let row; columns : columnasTabla;"></tr>
+
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="4"> No hay datos que conicidan con el filtro "{{input.value}}"</td>
+      </tr>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[5,10,20]" showFirstLastButtons>
+    </mat-paginator>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-raised-button color="warn" (click)="closeDialog(true)">Volver</button>
+  <button mat-raised-button color="primary" (click)="closeDialog(false)">Confirmar</button>
+</mat-dialog-actions>

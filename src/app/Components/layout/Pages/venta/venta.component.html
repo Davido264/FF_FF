@@ -13,7 +13,7 @@
                   Cédula:
                 </td>
                 <td>
-                  HELLO WORLD OWO
+                  {{cliente?.cedulaCliente ?? ""}}
                 </td>
               </tr>
               <tr>
@@ -21,7 +21,7 @@
                   Nombres:
                 </td>
                 <td>
-                  HELLO WORLD OWO
+                  {{cliente?.nombreCompleto ?? ""}}
                 </td>
               </tr>
               <tr>
@@ -29,7 +29,15 @@
                   Dirección:
                 </td>
                 <td>
-                  HELLO WORLD OWO
+                  {{cliente?.direccion ?? ""}}
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  Correo:
+                </td>
+                <td>
+                  {{cliente?.correo ?? ""}}
                 </td>
               </tr>
             </table>
@@ -37,7 +45,7 @@
         </mat-grid-tile>
         <mat-grid-tile>
           <div [style]="flexEnd">
-            <button mat-icon-button color="basic">
+            <button mat-icon-button color="basic" (click)="buscarClientes()">
               <mat-icon mat-list-icon>person_add</mat-icon>
             </button>
           </div>
