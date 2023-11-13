@@ -14,6 +14,8 @@ export class ModalDetalleVentaComponent implements OnInit {
   numeroDocumento: string = '';
   tipoPago: string = '';
   total: string = '';
+  nombres: string = '';
+  cedula: string = '';
   detalleVenta: DetalleVenta[] = [];
   columnasTabla: string[] = ['producto', 'cantidad', 'precio', 'total'];
 
@@ -23,6 +25,8 @@ export class ModalDetalleVentaComponent implements OnInit {
     this.tipoPago = _venta.tipoPago;
     this.total = _venta.totalTexto;
     this.detalleVenta = _venta.detalleVenta;
+    this.nombres = _venta.cliente.nombreCompleto;
+    this.cedula = _venta.cliente.cedulaCliente;
   }
 
   ngOnInit(): void {}

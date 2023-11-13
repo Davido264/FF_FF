@@ -187,18 +187,22 @@ export class VentaComponent implements OnInit {
   }
 
   registrarVenta() {
-    if (this.listaProductoParaVenta.length > 0) {
+    if (this.listaProductoParaVenta.length > 0 && this.cliente) {
       this.bloquearBotonRegistrar = true;
       const request: Venta = {
+        cliente: this.cliente!,
         tipoPago: this.tipodePagoPorDefecto,
-        totalTexto: String(this.subTotal.toFixed(2)),
+        totalTexto: String(this.total.toFixed(2)),
         detalleVenta: this.listaProductoParaVenta,
       };
 
       this._ventaServicio.registrar(request).subscribe({
         next: (reponse) => {
+          console.log(reponse)
           if (reponse.status) {
             this.subTotal = 0.0;
+            this.total = 0.0;
+            this.iva = 0.0;
             this.listaProductoParaVenta = [];
             this.datosDetalleVenta = new MatTableDataSource(
               this.listaProductoParaVenta
@@ -217,7 +221,19 @@ export class VentaComponent implements OnInit {
         },
 
         complete: () => {
+          this._productoServicio.lista().subscribe({
+            next: (data) => {
+              if (data.status) {
+                const lista = data.value as Producto[];
+                this.listaProductos = lista.filter(
+                  (p) => p.esActivo == 1 && p.stock > 0
+                );
+              }
+            },
+            error: (e) => {},
+          });
           this.bloquearBotonRegistrar = false;
+          this.cliente = undefined;
         },
         error: (e) => {},
       });

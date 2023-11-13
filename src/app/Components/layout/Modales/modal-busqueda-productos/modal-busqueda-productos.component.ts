@@ -40,7 +40,12 @@ export class ModalBusquedaProductosComponent implements AfterViewInit {
       const producto = this.dataInicio.listaProductos.find(i => i.idProducto === d.idProducto)
       producto!.stock += d.cantidad
     })
-    this.dataInicio.listaProductoParaVenta = []
+
+    while (this.dataInicio.listaProductoParaVenta.length > 0) {
+      this.dataInicio.listaProductoParaVenta.pop()
+    }
+
+    this.dataListaProductos.data = this.dataInicio.listaProductos;
 
     this._dialogRef.close(undefined)
   }

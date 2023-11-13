@@ -24,6 +24,7 @@ export class VentaService {
     fechaInicio: string,
     fechaFin: string
   ): Observable<ResponseApi> {
+    console.log(`${this.urlApi}Historial?buscarPor=${buscarPor}&numeroVenta=${numeroVenta}&fechaInicio=${fechaInicio}&fechaFin=${fechaFin}`)
     return this.http.get<ResponseApi>(
       `${this.urlApi}Historial?buscarPor=${buscarPor}&numeroVenta=${numeroVenta}&fechaInicio=${fechaInicio}&fechaFin=${fechaFin}`
     );

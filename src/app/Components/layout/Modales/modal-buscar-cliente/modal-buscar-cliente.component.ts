@@ -32,7 +32,7 @@ export class ModalBuscarClienteComponent implements OnInit, AfterViewInit {
   ) {}
 
   closeDialog(cancel: boolean, cliente?: Cliente) {
-    if ((!cancel && cliente) || !cliente) {
+    if ((!cancel && cliente) || cliente) {
       this._dialogRef.close(cliente)
       return
     }

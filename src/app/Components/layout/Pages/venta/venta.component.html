@@ -137,7 +137,7 @@
       <mat-grid-tile>
         <div [style]="flexEnd">
           <button mat-raised-button color="primary" style="width: 80%;"
-            [disabled]="listaProductoParaVenta.length < 1 || bloquearBotonRegistrar "
+            [disabled]="listaProductoParaVenta.length < 1 || cliente === undefined"
             (click)="registrarVenta()">
             <mat-icon>new_label</mat-icon> Registrar
           </button>

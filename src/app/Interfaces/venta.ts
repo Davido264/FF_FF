@@ -1,3 +1,4 @@
+import { Cliente } from './cliente';
 import { DetalleVenta } from './detalle-venta';
 
 export interface Venta {
@@ -7,4 +8,5 @@ export interface Venta {
   fechaRegistro?: string;
   totalTexto: string;
   detalleVenta: DetalleVenta[];
+  cliente: Cliente
 }
