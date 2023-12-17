@@ -6,47 +6,61 @@
     <mat-grid-tile>
       <mat-form-field appearance="fill" style="width: 95%;">
         <mat-label>Nombres</mat-label>
-        <input matInput [(ngModel)]="nombres" [contentEditable]="false">
+        <input matInput [(ngModel)]="nombres" readonly>
       </mat-form-field>
     </mat-grid-tile>
     <mat-grid-tile>
       <mat-form-field appearance="fill" style="width: 95%;">
         <mat-label>Cédula</mat-label>
-        <input matInput [(ngModel)]="cedula" [contentEditable]="false">
+        <input matInput [(ngModel)]="cedula" readonly>
       </mat-form-field>
     </mat-grid-tile>
   </mat-grid-list>
   <h4>
     Datos generales de la factura
   </h4>
-  <mat-grid-list cols="4" rowHeight="80px">
+  <mat-grid-list cols="3" rowHeight="80px">
     <mat-grid-tile>
       <mat-form-field appearance="fill" style="width: 95%;">
         <mat-label>Fecha Registro </mat-label>
-        <input matInput [(ngModel)]="fechaRegistro" [contentEditable]="false">
+        <input matInput [(ngModel)]="fechaRegistro" readonly>
       </mat-form-field>
     </mat-grid-tile>
 
 
     <mat-grid-tile>
       <mat-form-field appearance="fill" style="width: 95%;">
-        <mat-label>Numero Venta </mat-label>
-        <input matInput [(ngModel)]="numeroDocumento" [contentEditable]="false">
+        <mat-label>No. Venta </mat-label>
+        <input matInput [(ngModel)]="numeroDocumento" readonly>
       </mat-form-field>
     </mat-grid-tile>
 
     <mat-grid-tile>
       <mat-form-field appearance="fill" style="width: 95%;">
         <mat-label>Tipo de Pago </mat-label>
-        <input matInput [(ngModel)]="tipoPago" [contentEditable]="false">
+        <input matInput [(ngModel)]="tipoPago" readonly>
       </mat-form-field>
 
     </mat-grid-tile>
 
     <mat-grid-tile>
       <mat-form-field appearance="fill" style="width: 95%;">
-        <mat-label>Total (+IVA) </mat-label>
-        <input matInput [(ngModel)]="total " [contentEditable]="false">
+        <mat-label>Subtotal</mat-label>
+        <input matInput [(ngModel)]="subtotal " readonly>
+      </mat-form-field>
+    </mat-grid-tile>
+
+    <mat-grid-tile>
+      <mat-form-field appearance="fill" style="width: 95%;">
+        <mat-label>IVA</mat-label>
+        <input matInput [(ngModel)]="iva " readonly>
+      </mat-form-field>
+    </mat-grid-tile>
+
+    <mat-grid-tile>
+      <mat-form-field appearance="fill" style="width: 95%;">
+        <mat-label>Total</mat-label>
+        <input matInput [(ngModel)]="total " readonly>
       </mat-form-field>
     </mat-grid-tile>
   </mat-grid-list>
