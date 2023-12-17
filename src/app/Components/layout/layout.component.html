@@ -1,16 +1,14 @@
 <mat-toolbar color="warn">
   <mat-toolbar-row>
-            <h1>Sistema de Facturación</h1>
-
             <button mat-icon-button (click)="sidenav.toggle();">
                 <mat-icon>menu</mat-icon>
-                 
-
             </button>
+
+            <h1>Sistema de Facturación</h1>
 
             <span style="flex: 1 1 auto;"></span>
             <label style="font-size: 14px; margin-right: 20px;">
-             {{correoUsuario}}|{{rolUsuario}}
+             {{correoUsuario}} | {{rolUsuario}}
             </label>
 
             <button mat-icon-button (click)="cerrarSesion()">
@@ -26,8 +24,8 @@
 <mat-sidenav-container>
     <mat-sidenav #sidenav opened="true" mode="side" style="width: 280px;">
         <mat-nav-list>
-       
-      
+
+
           <mat-list-item *ngFor="let menu of listaMenus" [routerLink]="menu.url">
             <div class="list-item-content">
               <mat-icon mat-list-icon>{{menu.icono}}</mat-icon>
@@ -38,7 +36,7 @@
 
         </mat-nav-list>
       </mat-sidenav>
-      
+
     <mat-sidenav-content>
         <div style="height: 90vh;">
          <router-outlet></router-outlet>

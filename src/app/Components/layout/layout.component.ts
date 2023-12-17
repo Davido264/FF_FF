@@ -25,17 +25,19 @@ export class LayoutComponent implements OnInit {
   ngOnInit(): void {
     const usuario = this._utilidadServicio.obtenerSesionUsuario();
 
-    if (usuario != null) {
-      this.correoUsuario = usuario.correo;
-      this.rolUsuario = usuario.rolDescription;
-
-      this._menuServicio.lista(usuario.idUsuario).subscribe({
-        next: (data) => {
-          if (data.status) this.listaMenus = data.value;
-        },
-        error: (e) => {},
-      });
+    if (usuario == null) {
+      this.router.navigate(['login']);
     }
+
+    this.correoUsuario = usuario.correo;
+    this.rolUsuario = usuario.rolDescription;
+
+    this._menuServicio.lista(usuario.idUsuario).subscribe({
+      next: (data) => {
+        if (data.status) this.listaMenus = data.value;
+      },
+      error: (e) => {},
+    });
   }
 
   cerrarSesion() {
