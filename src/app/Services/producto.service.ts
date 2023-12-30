@@ -28,4 +28,12 @@ export class ProductoService {
   eliminar(id: number): Observable<ResponseApi> {
     return this.http.delete<ResponseApi>(`${this.urlApi}Eliminar/${id}`);
   }
+
+  urlSubirArchivo(): Observable<ResponseApi> {
+    return this.http.get<ResponseApi>(`${this.urlApi}PermisoS3`)
+  }
+
+  subirImagen(url: string, file: File) {
+    return this.http.put(url,file, { headers: { "Content-Type": file.type } })
+  }
 }

@@ -30,6 +30,7 @@ import { MomentDateModule } from '@angular/material-moment-adapter';
 
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDividerModule } from '@angular/material/divider';
+import { NgpImagePickerModule } from '@codebuilt/ngp-image-picker';
 
 @NgModule({
   declarations: [],
@@ -62,6 +63,7 @@ import { MatDividerModule } from '@angular/material/divider';
     MomentDateModule,
     MatChipsModule,
     MatDividerModule,
+    NgpImagePickerModule,
   ],
   providers: [MatDatepickerModule, MatNativeDateModule],
 })

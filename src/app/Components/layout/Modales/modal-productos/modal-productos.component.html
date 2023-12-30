@@ -54,6 +54,9 @@
         </mat-form-field>
       </mat-grid-tile>
 
+      <mat-grid-tile rowspan="6">
+        <ngp-image-picker [_imageSrc]="imagenInicial" ($imageChanged)="onImageChanged($event)" [_config]="imgPickerConfig"> </ngp-image-picker>
+      </mat-grid-tile>
     </mat-grid-list>
   </form>
 </mat-dialog-content>

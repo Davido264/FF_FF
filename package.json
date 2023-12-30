@@ -23,6 +23,7 @@
     "@angular/platform-browser-dynamic": "^16.2.0",
     "@angular/router": "^16.2.0",
     "@auth0/angular-jwt": "^5.2.0",
+    "@codebuilt/ngp-image-picker": "^2.4.5",
     "chart.js": "^4.4.0",
     "moment": "^2.29.4",
     "prettier": "^3.1.0",
