@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  endPoint: 'http://proymovbackend.somee.com/api/',
+  endPoint: 'https://proymovbackend.somee.com/api/',
 };
