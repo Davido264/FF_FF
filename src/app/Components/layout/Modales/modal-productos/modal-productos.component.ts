@@ -92,8 +92,8 @@ export class ModalProductosComponent implements OnInit {
           next: (data) => {
             const file = this.dataURItoFile(this.imagenSeleccionada!,"upload")
             this._productoServicio.subirImagen(data.value,file).subscribe({
-              next: (data) => {
-                _producto.urlImagen = data.toString()
+              next: (_) => {
+                _producto.urlImagen = data.value.split("?")[0]
                 this.subirProducto(_producto)
               },
               error: (e) => { console.error(e) }
