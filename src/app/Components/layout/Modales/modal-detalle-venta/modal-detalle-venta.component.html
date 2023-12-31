@@ -46,21 +46,21 @@
     <mat-grid-tile>
       <mat-form-field appearance="fill" style="width: 95%;">
         <mat-label>Subtotal</mat-label>
-        <input matInput [(ngModel)]="subtotal " readonly>
+        <input matInput [(ngModel)]="subtotal " readonly style="text-align: right;">
       </mat-form-field>
     </mat-grid-tile>
 
     <mat-grid-tile>
       <mat-form-field appearance="fill" style="width: 95%;">
         <mat-label>IVA</mat-label>
-        <input matInput [(ngModel)]="iva " readonly>
+        <input matInput [(ngModel)]="iva " readonly style="text-align: right;">
       </mat-form-field>
     </mat-grid-tile>
 
     <mat-grid-tile>
       <mat-form-field appearance="fill" style="width: 95%;">
         <mat-label>Total</mat-label>
-        <input matInput [(ngModel)]="total " readonly>
+        <input matInput [(ngModel)]="total " readonly style="text-align: right;">
       </mat-form-field>
     </mat-grid-tile>
   </mat-grid-list>
@@ -81,12 +81,12 @@
 
     <ng-container matColumnDef="precio">
       <th mat-header-cell *matHeaderCellDef>  Precio </th>
-      <td mat-cell *matCellDef="let element"> {{element.precioTexto }} </td>
+      <td mat-cell *matCellDef="let element" style="text-align: right;"> {{element.precioTexto }} </td>
     </ng-container>
 
     <ng-container matColumnDef="total">
       <th mat-header-cell *matHeaderCellDef>  SubTotal </th>
-      <td mat-cell *matCellDef="let element"> {{element.totalTexto }} </td>
+      <td mat-cell *matCellDef="let element" style="text-align: right;"> {{element.totalTexto }} </td>
     </ng-container>
 
 

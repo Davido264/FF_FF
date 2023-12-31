@@ -82,9 +82,9 @@
               <td style="font-weight: bolder;">Total:</td>
             </tr>
             <tr>
-              <td>${{subTotal.toFixed(2)}}</td>
-              <td>${{iva.toFixed(2)}}</td>
-              <td style="font-weight: bolder;">${{total.toFixed(2)}}</td>
+              <td style="text-align: right;">${{subTotal.toFixed(2)}}</td>
+              <td style="text-align: right;">${{iva.toFixed(2)}}</td>
+              <td style="text-align: right;">${{total.toFixed(2)}}</td>
             </tr>
           </table>
         </div>
@@ -111,7 +111,7 @@
 
         <ng-container matColumnDef="total">
           <th mat-header-cell *matHeaderCellDef>  SubTotal </th>
-          <td mat-cell *matCellDef="let element"> {{element.totalTexto}} </td>
+          <td mat-cell *matCellDef="let element" style="text-align: right;"> {{element.totalTexto}} </td>
         </ng-container>
 
         <ng-container matColumnDef="accion">
