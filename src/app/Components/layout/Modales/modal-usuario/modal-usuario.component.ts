@@ -30,7 +30,7 @@ export class ModalUsuarioComponent implements OnInit {
   ) {
     this.formuladioUsuario = this.fb.group({
       nombreCompleto: ['', Validators.required],
-      correo: ['', Validators.required],
+      correo: ['', (this.datosUsuario != null)? Validators.required : null, Validators.email],
       idRol: ['', Validators.required],
       clave: ['', Validators.required],
       esActivo: ['1', Validators.required],
@@ -88,21 +88,37 @@ export class ModalUsuarioComponent implements OnInit {
         error: (e) => {},
       });
     } else {
-      this._usuarioServicio.editar(_usuario).subscribe({
+      this._usuarioServicio.lista().subscribe({
         next: (data) => {
-          if (data.status) {
-            this._utilidadServicio.mostrarAlerta(
-              'El usuario fue actualizado correctamente',
-              'Exito'
-            );
-            this.modalActual.close('true');
-          } else
-            this._utilidadServicio.mostrarAlerta(
-              'No se pudo actualizar al usuario',
-              'Error'
-            );
-        },
-        error: (e) => {},
+          if (!data.status) {
+            this._utilidadServicio.mostrarAlerta("Error al verificar el correo","Opps!")
+            return
+          }
+
+          const isNotAvailable = (data.value as Usuario[]).find(e => e.correo == _usuario.correo) != undefined
+          if (isNotAvailable) {
+            this._utilidadServicio.mostrarAlerta("Este correo ya ha sido registrado","Opps!")
+            return
+
+          }
+
+          this._usuarioServicio.editar(_usuario).subscribe({
+            next: (data) => {
+              if (data.status) {
+                this._utilidadServicio.mostrarAlerta(
+                  'El usuario fue actualizado correctamente',
+                  'Exito'
+                );
+                this.modalActual.close('true');
+              } else
+                this._utilidadServicio.mostrarAlerta(
+                  'No se pudo actualizar al usuario',
+                  'Error'
+                );
+            },
+            error: (e) => {},
+          });
+        }
       });
     }
   }

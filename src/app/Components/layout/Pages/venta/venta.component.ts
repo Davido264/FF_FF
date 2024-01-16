@@ -39,6 +39,7 @@ export class VentaComponent implements OnInit {
   subTotal: number = 0;
   iva: number = 0;
   total: number = 0;
+  date: Date = new Date();
 
   columnasTabla: string[] = [
     'producto',
