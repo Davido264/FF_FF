@@ -28,9 +28,13 @@ export class ModalUsuarioComponent implements OnInit {
     private _usuarioServicio: UsuarioService,
     private _utilidadServicio: UtilidadService
   ) {
+    const correoValidator = this.datosUsuario != null?
+      Validators.compose([Validators.required,Validators.email])
+      : Validators.email
+
     this.formuladioUsuario = this.fb.group({
       nombreCompleto: ['', Validators.required],
-      correo: ['', (this.datosUsuario != null)? Validators.required : null, Validators.email],
+      correo: ['',correoValidator],
       idRol: ['', Validators.required],
       clave: ['', Validators.required],
       esActivo: ['1', Validators.required],
@@ -71,23 +75,6 @@ export class ModalUsuarioComponent implements OnInit {
     };
 
     if (this.datosUsuario == null) {
-      this._usuarioServicio.guardar(_usuario).subscribe({
-        next: (data) => {
-          if (data.status) {
-            this._utilidadServicio.mostrarAlerta(
-              'El usuario fue registrado',
-              'Exito'
-            );
-            this.modalActual.close('true');
-          } else
-            this._utilidadServicio.mostrarAlerta(
-              'No se pudo regitrar el usuario',
-              'Error'
-            );
-        },
-        error: (e) => {},
-      });
-    } else {
       this._usuarioServicio.lista().subscribe({
         next: (data) => {
           if (!data.status) {
@@ -102,23 +89,40 @@ export class ModalUsuarioComponent implements OnInit {
 
           }
 
-          this._usuarioServicio.editar(_usuario).subscribe({
+          this._usuarioServicio.guardar(_usuario).subscribe({
             next: (data) => {
               if (data.status) {
                 this._utilidadServicio.mostrarAlerta(
-                  'El usuario fue actualizado correctamente',
+                  'El usuario fue registrado',
                   'Exito'
                 );
                 this.modalActual.close('true');
               } else
                 this._utilidadServicio.mostrarAlerta(
-                  'No se pudo actualizar al usuario',
+                  'No se pudo regitrar el usuario',
                   'Error'
                 );
             },
             error: (e) => {},
           });
         }
+      });
+    } else {
+      this._usuarioServicio.editar(_usuario).subscribe({
+        next: (data) => {
+          if (data.status) {
+            this._utilidadServicio.mostrarAlerta(
+              'El usuario fue actualizado correctamente',
+              'Exito'
+            );
+            this.modalActual.close('true');
+          } else
+            this._utilidadServicio.mostrarAlerta(
+              'No se pudo actualizar al usuario',
+              'Error'
+            );
+        },
+        error: (e) => {},
       });
     }
   }

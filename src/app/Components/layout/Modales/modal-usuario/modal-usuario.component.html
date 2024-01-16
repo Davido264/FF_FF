@@ -16,7 +16,7 @@
       <mat-grid-tile>
         <mat-form-field appearance="outline">
           <mat-label> Correo </mat-label>
-          <input matInput autocomplete="off" formControlName="correo" [disabled]="tituloAccion === 'Editar'">
+          <input matInput autocomplete="off" formControlName="correo" [disabled]="datosUsuario != null">
           <mat-icon matSuffix>mail</mat-icon>
         </mat-form-field>
       </mat-grid-tile>
